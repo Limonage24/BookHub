@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @listbookgenre %>
+
+<div>
+  <%= link_to "Edit this listbookgenre", edit_listbookgenre_path(@listbookgenre) %> |
+  <%= link_to "Back to listbookgenres", listbookgenres_path %>
+
+  <%= button_to "Destroy this listbookgenre", @listbookgenre, method: :delete %>
+</div>

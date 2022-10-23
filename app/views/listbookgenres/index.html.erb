@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Listbookgenres</h1>
+
+<div id="listbookgenres">
+  <% @listbookgenres.each do |listbookgenre| %>
+    <%= render listbookgenre %>
+    <p>
+      <%= link_to "Show this listbookgenre", listbookgenre %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New listbookgenre", new_listbookgenre_path %>

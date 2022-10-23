@@ -1,0 +1,2 @@
+class Listbookgenre < ApplicationRecord
+end

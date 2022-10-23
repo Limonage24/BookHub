@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @listbookauthor %>
+
+<div>
+  <%= link_to "Edit this listbookauthor", edit_listbookauthor_path(@listbookauthor) %> |
+  <%= link_to "Back to listbookauthors", listbookauthors_path %>
+
+  <%= button_to "Destroy this listbookauthor", @listbookauthor, method: :delete %>
+</div>
