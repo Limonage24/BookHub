@@ -26,6 +26,22 @@
     <%= form.text_area :cover %>
   </div>
 
+  <%#= form.fields_for :authors_attributes, name: 'authors_attributes[]' do |builder| %>
+    <div>
+      <%= form.label :author, style: "display: block" %>
+      <%= form.text_field :author, name: 'authors_attributes[][name]' %>
+    </div>
+
+  <div>
+    <%= form.label :author, style: "display: block" %>
+    <%= form.text_field :author, name: 'authors_attributes[][name]' %>
+  </div>
+
+  <div>
+    <%= form.label :genre, style: "display: block" %>
+    <%= form.text_field :author, name: 'genres_attributes[][name]' %>
+  </div>
+
   <div>
     <%= form.submit %>
   </div>

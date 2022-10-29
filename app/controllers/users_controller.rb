@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy]
-  skip_before_action :require_login, only: %i[new create]
+  # skip_before_action :require_login, only: %i[new create]
   before_action :admin_access, only: %i[index]
   before_action :is_current, only: %i[edit show destroy]
 
@@ -69,6 +69,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :password, :password_confirmation, :description, :role, :avatar)
+      params.require(:user).permit(:username, :password, :password_confirmation, :description, :avatar)
     end
 end
