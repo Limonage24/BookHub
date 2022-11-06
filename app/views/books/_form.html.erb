@@ -26,10 +26,9 @@
     <%= form.text_area :cover %>
   </div>
 
-  <%#= form.fields_for :authors_attributes, name: 'authors_attributes[]' do |builder| %>
     <div>
       <%= form.label :author, style: "display: block" %>
-      <%= form.text_field :author, name: 'authors_attributes[][name]' %>
+      <%= form.text_field :author, name: 'authors_attributes[][name]', value: book.authors.first.name %>
     </div>
 
   <div>
@@ -39,7 +38,7 @@
 
   <div>
     <%= form.label :genre, style: "display: block" %>
-    <%= form.text_field :author, name: 'genres_attributes[][name]' %>
+    <%= form.text_field :genre, name: 'genres_attributes[][name]' %>
   </div>
 
   <div>

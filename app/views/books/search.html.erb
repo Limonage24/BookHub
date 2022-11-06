@@ -1,6 +1,4 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Books</h1>
+<h1>Books found</h1>
 
 <%= form_with(url: search_books_url, method: :get) do |form| %>
   <div>
@@ -13,7 +11,7 @@
 <% end %>
 
 <div id="books">
-  <% @books.each do |book| %>
+  <% @books_found.each do |book| %>
     <%= render book %>
     <p>
       <%= link_to "Show this book", book %>

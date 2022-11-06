@@ -10,6 +10,11 @@ class BooksController < ApplicationController
   # GET /books/1 or /books/1.json
   def show; end
 
+  # GET /books/search
+  def search
+    @books_found = Book.where("name LIKE ?", "%#{book_search_params[:book_name]}%").sort_by(&:name)
+  end
+
   # GET /books/new
   def new
     @book = Book.new
@@ -77,6 +82,10 @@ class BooksController < ApplicationController
 
   def book_genres_params
     params.require(:genres_attributes).map { |genre| genre.permit(:name) }
+  end
+
+  def book_search_params
+    p params.require(:search_request).permit(:book_name)
   end
 
   def set_authors

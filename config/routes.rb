@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   resources :listuserlikedbooks
   resources :listbookgenres
   resources :listbookauthors
-  resources :books
+  resources :books do
+    get 'search', on: :collection, to: 'books#search'
+  end
   resources :authors
   get 'session/login'
   get 'session/create'
