@@ -7,4 +7,10 @@
   <%= link_to "Back to books", books_path %>
 
   <%= button_to "Destroy this book", @book, method: :delete %>
+
+  <div class="comments" id="comment-block">
+    <% @book_comments.each do |root_comment| %>
+      <%= safe_comment_tree root_comment %>
+    <% end %>
+  </div>
 </div>

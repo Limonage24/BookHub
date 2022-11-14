@@ -430,7 +430,7 @@ ALTER TABLE ONLY public.comments
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_comments_id_fk FOREIGN KEY (reply_to) REFERENCES public.comments(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT comments_comments_id_fk FOREIGN KEY (reply_to_id) REFERENCES public.comments(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --

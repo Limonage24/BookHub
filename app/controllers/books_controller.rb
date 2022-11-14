@@ -8,11 +8,15 @@ class BooksController < ApplicationController
   end
 
   # GET /books/1 or /books/1.json
-  def show; end
+  def show
+    comments_assoc_arr = Comment.where(book_id: @book.id).to_a
+    min = comments_assoc_arr.min { |comment1, comment2| comment1.id <=> comment2.id }
+    @book_comments = form_comments_tree(comments_assoc_arr, min.id)
+  end
 
   # GET /books/search
   def search
-    @books_found = Book.where("name LIKE ?", "%#{book_search_params[:book_name]}%").sort_by(&:name)
+    @books_found = Book.where('name LIKE ?', "%#{book_search_params[:book_name]}%").sort_by(&:name)
   end
 
   # GET /books/new
@@ -85,7 +89,7 @@ class BooksController < ApplicationController
   end
 
   def book_search_params
-    p params.require(:search_request).permit(:book_name)
+    params.require(:search_request).permit(:book_name)
   end
 
   def set_authors
@@ -93,11 +97,11 @@ class BooksController < ApplicationController
       next if author_name[:name].empty?
 
       author = Author.find_by_name(author_name[:name])
-      if author.nil?
-        @book.authors << Author.new(name: author_name[:name])
-      else
-        @book.authors << author
-      end
+      @book.authors << if author.nil?
+                         Author.new(name: author_name[:name])
+                       else
+                         author
+                       end
     end
   end
 
@@ -106,11 +110,25 @@ class BooksController < ApplicationController
       next if genre_name[:name].empty?
 
       genre = Genre.find_by_name(genre_name[:name])
-      if genre.nil?
-        @book.genres << Genre.new(name: genre_name[:name])
-      else
-        @book.genres << genre
-      end
+      @book.genres << if genre.nil?
+                        Genre.new(name: genre_name[:name])
+                      else
+                        genre
+                      end
+    end
+  end
+
+  def form_comments_tree(comments_arr, min_id, reply_to = nil)
+    comments_arr.select { |com| com.reply_to_id == reply_to }
+                .map do |child|
+      node = child
+      children = form_comments_tree(comments_arr, min_id, child.id)
+      node = if children.empty?
+               [node]
+             else
+               [node, children]
+             end
+      node
     end
   end
 end

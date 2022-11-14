@@ -1,5 +1,6 @@
 class Comment < ApplicationRecord
-  has_one :user
-  has_one :book
-  has_one :reply_to, class_name: 'Comment', optional: true
+  belongs_to :user
+  belongs_to :book
+  has_one :reply_to, class_name: 'Comment'
+  belongs_to :reply_to, class_name: 'Comment', optional: true
 end
