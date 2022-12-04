@@ -1,22 +1,28 @@
-<div id="<%= dom_id comment %>">
-  <p>
-    <strong>User:</strong>
-    <%= comment.user_id %>
-  </p>
-
-  <p>
-    <strong>Book:</strong>
-    <%= comment.book_id %>
-  </p>
-
-  <p>
-    <strong>Reply to:</strong>
-    <%= comment.reply_to %>
-  </p>
-
-  <p>
-    <strong>Content:</strong>
+<div class="comment" id="<%= dom_id comment %>">
+  <div class="comment-header">
+    <%= link_to user_url(comment.user) do %>
+      <% avatar = comment.user.avatar.nil? || comment.user.avatar&.empty? ? "no_avatar.png" : comment.user.avatar %>
+      <span class="avatar"><%= image_tag avatar, height: 30, width: 30 %> </span>
+      <%end %>
+    <%= link_to user_url(comment.user) do %>
+      <span class="username"><%= comment.user.username %></span>
+    <% end %>
+  </div>
+  <div class="comment-date">
+    <%= comment.created_at.strftime("%H:%M %d.%m.%Y") %>
+  </div>
+  <div class="comment-body">
     <%= comment.content %>
-  </p>
-
+  </div>
+  <div>
+  <button data-controller="comment"
+          data-action="comment#reply_to"
+          data-comment-id-value="<%= comment.id %>"
+          data-comment-book-value="<%= comment.book_id %>"
+          data-comment-url-value="/comments"
+          id="reply_to_<%= comment.id %>_btn">
+    Ответить
+  </button>
+  <div class="reply_to_div" id="reply_to_<%= comment.id %>_div"></div>
+  </div>
 </div>

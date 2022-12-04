@@ -8,6 +8,17 @@
 
   <%= button_to "Destroy this book", @book, method: :delete %>
 
+  <%= form_with model: Comment.new do |form| %>
+    <div>
+      <%= form.label :content, style: "display: block" %>
+      <%= form.text_area :content %>
+
+      <%= hidden_field_tag('comment[book_id]', @book.id) %>
+      <div>
+        <%= form.submit %>
+      </div>
+    </div>
+  <% end %>
   <div class="comments" id="comment-block">
     <% @book_comments.each do |root_comment| %>
       <%= safe_comment_tree root_comment %>

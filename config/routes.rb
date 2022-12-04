@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :comments
+  resources :comments do
+    collection do
+      get 'reply_to', defaults: { format: :json }
+    end
+  end
   resources :listuserlikedbooks
   resources :listbookgenres
   resources :listbookauthors
