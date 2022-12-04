@@ -1,24 +1,3 @@
-# README
+<h1>BookHub</h1>
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Проект для поиска и обсуждения книг. Пользователи смогут найти книгу (если она имеется в БД приложения) и принять участие в её обсуждении с другими пользователями в рамках форума.
