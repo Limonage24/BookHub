@@ -12,16 +12,18 @@
   <% end %>
 
   <div>
-    <%= form.label :id_genre, style: "display: block" %>
-    <%= form.text_field :id_genre %>
+    <label class="form-label">Название жанра:</label><br/>
+    <%= form.text_field :name, class:'information-input form-controls', placeholder: 'Введите название книги' %>
   </div>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="d-flex flex-column">
+    <%= form.label 'Описание жанра:',  class:"form-label" %>
+    <%= form.text_area :description, placeholder: 'Введите описание', class:'form-controls' do%>
+      <%= genre.description %>
+    <% end %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="submit-btn d-flex justify-content-center">
+    <%= form.submit 'Принять', class: 'btn btn-my btn-lg' %>
   </div>
 <% end %>

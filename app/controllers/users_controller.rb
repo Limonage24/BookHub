@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy]
-  # skip_before_action :require_login, only: %i[new create]
-  # before_action :admin_access, only: %i[index]
-  # before_action :is_current, only: %i[edit show destroy]
+  before_action :set_user, only: %i[ show edit update destroy show_liked_books show_read_books]
+  skip_before_action :require_login, only: %i[new create show]
+  before_action :admin_access, only: %i[index]
+  before_action :current_or_admin?, only: %i[edit update destroy]
+  before_action :current?, only: %i[show_read_books show_liked_books]
 
   # GET /users or /users.json
   def index
@@ -49,6 +50,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def show_liked_books
+    @liked_books = []
+    @user.listuserlikedbooks&.each do |record|
+      @liked_books << Book.find(record.book_id)
+    end
+  end
+
+  def show_read_books
+    @read_books = []
+    @user.listuserreadbooks&.each do |record|
+      @read_books << [Book.find(record.book_id), record.created_at]
+    end
+  end
+
   # DELETE /users/1 or /users/1.json
   def destroy
     @user.destroy
@@ -60,12 +75,12 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+  # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
   end
 
-    # Only allow a list of trusted parameters through.
+  # Only allow a list of trusted parameters through.
   def user_params
     params.require(:user).permit(:username, :password, :password_confirmation, :description, :avatar)
   end

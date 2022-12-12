@@ -1,22 +1,10 @@
 <div id="<%= dom_id user %>">
-  <p>
-    <strong>Username:</strong>
-    <%= user.username %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= user.description %>
-  </p>
-
-  <p>
-    <strong>Role:</strong>
-    <%= user.role %>
-  </p>
-
-  <p>
-    <strong>Avatar:</strong>
-    <%= user.avatar %>
-  </p>
-
+  <li class="user-list-item">
+    <a class="user-link" href="<%= user_url user %>">
+      <% avatar = user.avatar.nil? || user.avatar&.empty? ? "no_avatar.png" : user.avatar %>
+      <%= image_tag avatar, height: 35, width: 35, class: "d-inline-block align-center" %>
+      <%= user.username %>
+    </a>
+    <%= link_to 'Редактировать пользователя', edit_user_url(user), type: 'button', class: 'btn btn-my btn-sm' %>
+  </li>
 </div>

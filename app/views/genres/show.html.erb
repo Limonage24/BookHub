@@ -1,10 +1,26 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
 <%= render @genre %>
 
-<div>
-  <%= link_to "Edit this genre", edit_genre_path(@genre) %> |
-  <%= link_to "Back to genres", genres_path %>
+  <% if @genre.books.empty? %>
+    <h5>Пока у нас нет книг по данному жанру. Но скоро они будут добавлены!</h5>
+  <%else %>
+    <h5>Книги по данному жанру:</h5>
+    <div class="genre-books d-flex flex-wrap">
+      <% @genre.books.each do |book| %>
+        <%= render 'books/book_brief', book: book %>
+      <% end %>
+    </div>
+  <% end %>
 
-  <%= button_to "Destroy this genre", @genre, method: :delete %>
-</div>
+  <% if admin_signed_in?%>
+    <div class="admin-book-tools align-items-center btn-toolbar border w-auto justify-content-around" role="toolbar" aria-label="Toolbar with button groups">
+      <%= button_to "Отредактировать информацию о жанре", edit_genre_path(@genre), method: :get, class: 'btn btn-my' %>
+      &nbsp;&nbsp;&nbsp;
+      <%= button_to "Удалить жанр", @genre, method: :delete, class: 'btn btn-danger' %>
+    </div>
+  <% end %>
+  <div class="back-btn">
+    <%= link_to "Вернуться к списку жанров", genres_url, type: 'button', class: 'btn btn-my' %>
+  </div>
+

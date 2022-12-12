@@ -1,0 +1,19 @@
+<h1>Прочитанные книги</h1>
+<div class="d-flex flex-wrap">
+  <% if @read_books&.empty? %>
+    <h5>Вы ещё не добавили в прочитанные ни одной книги.</h5>
+  <% else %>
+    <% @read_books.each do |record| %>
+      <div class="d-flex flex-column p-2">
+        <span class="badge badge-secondary">
+             Прочитано <%= record.second.strftime("%d.%m.%Y, %H:%M") %>
+        </span>
+        <%= render 'books/book_brief', book: record.first %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="back-btn">
+  <%= link_to "Вернуться к своему профилю", @user, type: 'button', class: 'btn btn-my back-btn' %>
+</div>

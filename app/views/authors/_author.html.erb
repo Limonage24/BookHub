@@ -1,12 +1,10 @@
 <div id="<%= dom_id author %>">
-  <p>
-    <strong>Name:</strong>
-    <%= author.name %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= author.description %>
-  </p>
-
+  <div class="author-content">
+    <h2><%= author.name %></h2>
+    <% if !author.description.nil? && !author.description&.empty? %>
+      <div class="author-description p-2 d-flex flex-column">
+        <%= author.description %>
+      </div>
+    <% end %>
+  </div>
 </div>

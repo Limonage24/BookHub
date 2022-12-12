@@ -1,17 +1,35 @@
-<div id="<%= dom_id book %>">
-  <p>
-    <strong>Name:</strong>
-    <%= book.name %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= book.description %>
-  </p>
-
-  <p>
-    <strong>Cover:</strong>
-    <%= book.cover %>
-  </p>
+<div id="<%= dom_id book %>" class="d-flex flex-row">
+  <div class="cover ml-1">
+    <% cover = book.cover&.empty? ? "no_cover.png" : book.cover %>
+    <%= image_tag cover, height: 300, width: 200 %>
+  </div>
+  <div class="text ml-2">
+    <div class="book-header">
+      <h2 class="book-name"><%= book.name %></h2>
+      <div class="book-authors ml-2">
+        <% book.authors.each do |author| %>
+          <%= link_to author_url(author), class: 'author-name' do %>
+              <span class="author-name"><%= author.name %></span>
+          <% end %>
+          <br/>
+        <% end %>
+      </div>
+    </div>
+    <div class="book-description">
+      <h6>Аннотация:</h6>
+      <p class="ml-2">
+        <%= book.description %>
+      </p>
+    </div>
+    <div class="book-genres">
+      <h6>Жанр: </h6>
+      <% book.genres.each do |genre| %>
+        <%= link_to genre_url(genre), type:'button', class: 'genre-name btn btn-outline-secondary btn-sm' do %>
+          <span class="genre-name"><%= genre.name %></span>
+        <% end %>
+        &nbsp;
+      <% end %>
+    </div>
+  </div>
 
 </div>

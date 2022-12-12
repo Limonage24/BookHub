@@ -12,6 +12,37 @@
   </head>
 
   <body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark my-primary">
+      <a class="navbar-brand align-items-center" id="nav_header" href="<%= root_url %>">
+        <%= image_tag "logo.png", height: 40, width: 40, class: "d-inline-block align-center" %>
+        BookHub</a>
+      <ul class="navbar-nav flex-row mr-auto">
+        <li class="nav-item">
+          <a class="nav-link active nav_text" href="<%= root_url %>">На главную</a>
+        </li>
+        &nbsp;
+        <li class="nav-item">
+          <a class="nav-link active nav_text" href="<%= genres_url %>">Жанры</a>
+        </li>
+        &nbsp;
+        <li class="nav-item">
+          <a class="nav-link active nav_text" href="<%= authors_url %>">Авторы</a>
+        </li>
+      </ul>
+      <% if !signed_in? %>
+        <div class="btn-group">
+          <%= link_to 'Войти', session_login_url, type:'button', class: 'btn btn-my' %>
+          <%= link_to 'Зарегистрироваться', new_user_url, class: 'btn btn-my' %>
+        </div>
+      <% else %>
+        <div class="btn-group">
+          <%= link_to 'Мой аккаунт', current_user, class: 'btn btn-my'%>
+          <%= link_to 'Выйти', session_logout_url, class: 'btn btn-my'%>
+        </div>
+      <% end %>
+    </nav>
+  </header>
     <%= yield %>
   </body>
 </html>

@@ -1,10 +1,50 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
-<%= render @user %>
+<div class="user-information mx-auto w-auto center">
+  <div class="center">
+    <% avatar = @user.avatar.nil? || @user.avatar&.empty? ? "no_avatar.png" : @user.avatar %>
+    <%= image_tag avatar, height: 100, width: 100, class: "d-inline-block align-center" %>
+    <h4><%= @user.username %></h4>
+  </div>
+    <% if @user == current_user %>
+        <div class="btn-toolbar justify-content-center">
+          <div class="btn-group mr-2">
+           <%= button_to 'Редактировать профиль', edit_user_path(@user), method: :get, class: 'btn btn-my btn-sm' %>
+          </div>
+          <div class="btn-group mr-2">
+            <%= button_to 'Удалить профиль', user_path(@user), method: :delete, class: 'btn btn-my btn-sm', id: 'del_btn', data: { confirm: 'Are you sure?' } %>
+          </div>
+        </div>
+    <% end %>
+  </div>
 
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
+<div class="user-content d-flex flex-row">
+  <% if @user == current_user %>
+  <div class="user-collections-btns btn-group-vertical p-2">
+      <%= link_to "Избранное", liked_books_users_url(params: {id: @user.id}), method: :get, class: 'btn btn-my submit-btn'%>
+      <%= link_to "Прочитанные книги", read_books_users_url(params: {id: @user.id}), method: :get, class: 'btn btn-my submit-btn' %>
+  </div>
+  <% end %>
+  <% if @user.description.nil? %>
+    <label>Пользователь не добавил описания профиля</label>
+  <% else %>
 
-  <%= button_to "Destroy this user", @user, method: :delete %>
+    <div class="user-description d-flex flex-column p-2 mx-auto">
+      <label class="form-label">Описание профиля пользователя:</label>
+        <%= @user.description %>
+    </div>
+  <% end %>
 </div>
+
+<% if admin_signed_in? %>
+  <div class="btn-toolbar justify-content-around mt-5 border border-dark p-2">
+    <h5>Доступные действия администратора:</h5>
+    <div class="btn-group mr-2">
+      <%= button_to 'Список пользователей', users_url, method: :get, class: 'btn btn-my btn-sm' %>
+    </div>
+    <div class="btn-group mr-2">
+      <%= button_to 'Сохранить резервную копию БД', export_export_db_url, method: :get, class: 'btn btn-my btn-sm' %>
+    </div>
+  </div>
+<% end %>
+

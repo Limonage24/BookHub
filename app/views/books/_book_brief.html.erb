@@ -1,0 +1,20 @@
+<div id="<%= dom_id book %>" class="p-2 d-flex flex-column index-item">
+  <div class="cover p-2">
+    <% cover = book.cover&.empty? ? "no_cover.png" : book.cover %>
+    <%= image_tag cover, height: 150, width: 100 %>
+  </div>
+  <div class="book-header p-2">
+    <h4 class="book-name"><%= book.name %></h4>
+    <div class="book-authors">
+      <% book.authors.each do |author| %>
+        <%= link_to author_url(author), class: 'author-name' do %>
+          <span class="author-name"><%= author.name %></span>
+        <% end %>
+        <br/>
+      <% end %>
+    </div>
+  </div>
+  <div class="show-book-btn mt-auto p-2">
+    <%= button_to "Перейти к книге", book_url(book), method: :get, class: 'btn btn-my' %>
+  </div>
+</div>

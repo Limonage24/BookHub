@@ -10,9 +10,96 @@
     z-index: 9;
 }
 .comment-children {
-    border-left: solid 1px gray;
-    background-color: white;
+    border-left: solid 2px #934145;
     padding-left: 18px;
     margin-left: 5px;
     position: relative;
+}
+.comments-thread, .comment, .comment-children, .comments-header, .comments-thread {
+    background-color: #F1E2E3;
+}
+
+.comments-thread {
+    margin: 0px 10px 15px;
+    padding: 15px;
+    border: 1px solid #934145;
+}
+
+.comments-header {
+    border: 1px solid #934145;
+    border-bottom: 0px;
+    margin: 15px 10px 0px;
+    padding: 18px;
+}
+
+.comment {
+    margin: 10px;
+}
+
+.comment-content, .book-description {
+    word-break: break-word;
+}
+
+.reply_to_div {
+    border: 1px solid #934145;
+    padding: 5px;
+}
+
+button.reply-link {
+    text-decoration: none;
+    color: #1A7F7F;
+}
+
+button.reply-link:hover {
+    text-decoration: underline;
+    color: #1A7F7F;
+}
+
+a.username{
+    margin-left: 5px;
+    font-size: 14pt;
+    color: black;
+    text-decoration: none;
+}
+
+a.author-name {
+    text-decoration: none;
+}
+
+a.author-name:hover {
+    text-decoration: underline;
+}
+
+.content-block {
+    margin-left: 15px;
+}
+
+.create-comment {
+    margin-top: 10px;
+}
+
+p.no-comments {
+    text-align: center;
+    font-size: 14pt;
+}
+
+p.cant-write-comment {
+    font-size: 14pt;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div.book-brief:hover {
+    box-shadow: 0 3px 10px gray;
+}
+
+a.genre-name {
+    border: 0px;
+    color: black;
+    background-color: #E2E2E2;
+}
+
+div.admin-book-tools {
+    margin-bottom: 10px;
+    margin-top: 10px;
 }

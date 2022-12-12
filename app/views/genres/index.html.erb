@@ -1,14 +1,20 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
-<h1>Genres</h1>
+<h1>Список жанров</h1>
+<h5>Выберите интересующий вас жанр:</h5>
 
 <div id="genres">
-  <% @genres.each do |genre| %>
-    <%= render genre %>
-    <p>
-      <%= link_to "Show this genre", genre %>
-    </p>
-  <% end %>
+  <ul class="genre-list">
+    <% @genres.each do |genre| %>
+      <li>
+        <%= link_to genre.name, genre_url(genre), type: 'button', class: 'genre' %>
+      </li>
+    <% end %>
+  </ul>
 </div>
 
-<%= link_to "New genre", new_genre_path %>
+<% if admin_signed_in? %>
+  <div class="admin-book-tools align-items-center btn-toolbar border w-auto" role="toolbar" aria-label="Toolbar with button groups">
+    <%= button_to "Добавить новый жанр", new_genre_url, method: :get, class: 'btn btn-my' %>
+  </div>
+<% end %>

@@ -1,0 +1,13 @@
+a.author {
+    text-decoration: none;
+    color: black;
+    font-size: 13pt;
+}
+
+a.author:hover {
+    text-decoration: underline;
+}
+
+ul.author-list {
+    margin-left: 20px;
+}

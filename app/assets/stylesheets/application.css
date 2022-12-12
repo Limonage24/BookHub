@@ -13,3 +13,88 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+    background-color: #F5ECED;
+}
+textarea {
+    resize: none;
+}
+
+.btn {
+    padding: 2px 10px 5px;
+}
+
+.btn-my {
+    background-color: #51C3C3;
+    border-color: #1A7F7F;
+    color: white;
+}
+
+.btn-my-outline {
+    /*background-color: #51C3C3;*/
+    border-color: #1A7F7F;
+    color: #1A7F7F;
+    padding-top: 2px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 5px;
+}
+
+.nav_text {
+    font-size: 13pt;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#nav_header {
+    font-size: 22px;
+}
+
+.navbar {
+    background-color: #333A63;
+}
+
+textarea {
+    margin: 5px;
+    height: 100px;
+}
+
+label.form-label {
+    margin-left: 5px;
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+.form-controls {
+    margin-left: 10px;
+}
+
+.submit-btn, .back-btn {
+    margin-top: 10px;
+}
+
+input.information-input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 350px;
+}
+
+textarea.url-field {
+    height: 40px;
+}
+
+div.index-item:hover {
+    box-shadow: 0 3px 10px gray;
+}
+
+.center, .message, h1 {
+    text-align: center;
+}
+
+.date-label {
+    font-size: 10pt;
+    color: gray;
+    margin-left: 30px;
+    /*text-align: center;*/
+}

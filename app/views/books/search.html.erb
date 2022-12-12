@@ -1,22 +1,18 @@
-<h1>Books found</h1>
+<h1>Результаты поиска книг по запросу "<%= @search_param %>"</h1>
 
-<%= form_with(url: search_books_url, method: :get) do |form| %>
-  <div>
-    <%= form.label :search, style: "display: block" %>
-    <%= form.text_field :search, name: 'search_request[book_name]' %>
-  </div>
-  <div>
-    <%= form.submit %>
+<%= render 'search_form' %>
+
+<% if @books_found.empty? %>
+  <h5>К сожалению, по вашему запросу ничего не найдено.
+    Проверьте правильность запроса или попробуйте найти подходящую вам <a href="<%= genres_url %>">по жанру</a> книгу.</h5>
+<% else %>
+  <div id="books" class="d-flex flex-wrap">
+    <% @books_found.each do |book| %>
+      <%= render 'book_brief', book: book %>
+    <% end %>
   </div>
 <% end %>
 
-<div id="books">
-  <% @books_found.each do |book| %>
-    <%= render book %>
-    <p>
-      <%= link_to "Show this book", book %>
-    </p>
-  <% end %>
+<div class="back-btn">
+  <%= link_to "Вернуться к общему списку книг", books_url, type: 'button', class: 'btn btn-my' %>
 </div>
-
-<%= link_to "New book", new_book_path %>

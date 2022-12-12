@@ -1,10 +1,25 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
 <%= render @author %>
 
-<div>
-  <%= link_to "Edit this author", edit_author_path(@author) %> |
-  <%= link_to "Back to authors", authors_path %>
+<% if @author.books.empty? %>
+  <h5>Пока у нас нет книг этого автора. Но скоро они будут добавлены!</h5>
+<%else %>
+  <h5>Книги автора:</h5>
+  <div class="author-books d-flex flex-wrap">
+    <% @author.books.each do |book| %>
+      <%= render 'books/book_brief', book: book %>
+    <% end %>
+  </div>
+<% end %>
 
-  <%= button_to "Destroy this author", @author, method: :delete %>
-</div>
+  <% if admin_signed_in?%>
+    <div class="admin-book-tools align-items-center btn-toolbar border w-auto justify-content-around" role="toolbar" aria-label="Toolbar with button groups">
+      <%= button_to "Отредактировать информацию об авторе", edit_author_path(@author), method: :get, class: 'btn btn-my' %>
+      &nbsp;&nbsp;&nbsp;
+      <%= button_to "Удалить автора", @author, method: :delete, class: 'btn btn-danger' %>
+    </div>
+  <% end %>
+  <div class="back-btn">
+    <%= link_to "Вернуться к списку авторов", authors_url, type: 'button', class: 'btn btn-my' %>
+  </div>

@@ -1,28 +1,63 @@
 <div class="comment" id="<%= dom_id comment %>">
-  <div class="comment-header">
-    <%= link_to user_url(comment.user) do %>
-      <% avatar = comment.user.avatar.nil? || comment.user.avatar&.empty? ? "no_avatar.png" : comment.user.avatar %>
-      <span class="avatar"><%= image_tag avatar, height: 30, width: 30 %> </span>
-      <%end %>
-    <%= link_to user_url(comment.user) do %>
-      <span class="username"><%= comment.user.username %></span>
+  <div class="comment-header d-flex align-items-end">
+    <% if comment.user.nil? %>
+      <span class="avatar"><%= image_tag 'no_avatar.png', height: 30, width: 30 %> </span>
+      <span class="username">&lt;deleted&gt;</span>
+    <% else %>
+      <%= link_to user_url(comment.user) do %>
+        <% avatar = comment.user.avatar.nil? || comment.user.avatar&.empty? ? "no_avatar.png" : comment.user.avatar %>
+        <span class="avatar"><%= image_tag avatar, height: 30, width: 30 %> </span>
+        <%end %>
+      <%= link_to user_url(comment.user), class: 'username' do %>
+        <span class="username"><%= comment.user.username %></span>
+      <% end %>
     <% end %>
   </div>
-  <div class="comment-date">
+  <div class="date-label">
     <%= comment.created_at.strftime("%H:%M %d.%m.%Y") %>
   </div>
   <div class="comment-body">
-    <%= comment.content %>
-  </div>
-  <div>
-  <button data-controller="comment"
-          data-action="comment#reply_to"
-          data-comment-id-value="<%= comment.id %>"
-          data-comment-book-value="<%= comment.book_id %>"
-          data-comment-url-value="/comments"
-          id="reply_to_<%= comment.id %>_btn">
-    Ответить
-  </button>
-  <div class="reply_to_div" id="reply_to_<%= comment.id %>_div"></div>
-  </div>
+    <div class="comment-content">
+      <%= comment.content %>
+    </div>
+    <% unless comment.deleted %>
+      <div class="comment-control d-flex flex-column">
+      <% if signed_in? && (comment.user == current_user) %>
+        <div class="update_comment_div p-2">
+          <button data-controller="comment"
+                  data-action="comment#edit"
+                  data-comment-id-value="<%= comment.id %>"
+                  data-comment-book-value="<%= comment.book_id %>"
+                  data-comment-user-value="<%= current_user.id %>"
+                  data-comment-url-value="/comments/<%= comment.id %>"
+                  data-comment-reply-value="<%= comment.reply_to_id %>"
+                  data-comment-content-value="<%= comment.content %>"
+                  id="edit_<%= comment.id %>_btn"
+                  class="btn btn-my btn-sm">
+            Редактировать комментарий
+          </button>
+        </div>
+      <% end %>
+      <% if admin_signed_in? %>
+        <div class="delete_comment_btn p-2">
+          <%= button_to 'Удалить комментарий', comment_url(comment), method: 'delete', class: 'btn btn-sm btn-danger' %>
+        </div>
+      <% end %>
+      </div>
+    <% end %>
+    </div>
+  <% if signed_in? && !comment.deleted %>
+    <section>
+    <button data-controller="comment"
+            data-action="comment#reply_to"
+            data-comment-id-value="<%= comment.id %>"
+            data-comment-book-value="<%= comment.book_id %>"
+            data-comment-url-value="/comments"
+            id="reply_to_<%= comment.id %>_btn"
+            class="btn btn-link reply-link submit-btn">
+      Ответить
+    </button>
+    <div class="reply_to_div" id="reply_to_<%= comment.id %>_div" hidden="hidden"></div>
+    </section>
+  <% end %>
 </div>

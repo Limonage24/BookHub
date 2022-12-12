@@ -1,10 +1,7 @@
-<h1>Editing author</h1>
+<h1>Редактирование информации об авторе</h1>
 
 <%= render "form", author: @author %>
 
-<br>
-
-<div>
-  <%= link_to "Show this author", @author %> |
-  <%= link_to "Back to authors", authors_path %>
+<div class="back-btn">
+  <%= link_to "Вернуться к странице автора без изменений", @author, type: 'button', class: 'btn btn-my back-btn' %>
 </div>

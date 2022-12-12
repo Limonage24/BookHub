@@ -8,6 +8,10 @@ module SessionHelper
     !current_user.nil?
   end
 
+  def admin_signed_in?
+    current_user&.role == 'admin'
+  end
+
   def sign_out
     cookies.signed[:user_id] = nil
     self.current_user = nil

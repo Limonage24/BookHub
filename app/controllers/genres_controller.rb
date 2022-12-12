@@ -1,5 +1,7 @@
 class GenresController < ApplicationController
-  before_action :set_genre, only: %i[ show edit update destroy ]
+  before_action :set_genre, only: %i[show edit update destroy]
+  skip_before_action :require_login, only: %i[index show]
+  before_action :admin_access, only: %i[new create edit update destroy]
 
   # GET /genres or /genres.json
   def index
@@ -65,6 +67,6 @@ class GenresController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def genre_params
-      params.require(:genre).permit(:id_genre, :name)
+      params.require(:genre).permit( :name, :description)
     end
 end

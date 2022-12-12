@@ -14,4 +14,12 @@ module BooksHelper
   def safe_comment_tree(root)
     comment_tree(root).html_safe
   end
+
+  def already_liked?(book)
+    book.listuserlikedbooks&.pluck(:user_id)&.include?(current_user.id)
+  end
+
+  def already_read?(book)
+    book.listuserreadbooks&.pluck(:user_id)&.include?(current_user.id)
+  end
 end

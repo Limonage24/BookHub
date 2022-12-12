@@ -1,10 +1,7 @@
-<h1>Editing book</h1>
+<h1>Редактирование информации о книге</h1>
 
 <%= render "form", book: @book %>
 
-<br>
-
-<div>
-  <%= link_to "Show this book", @book %> |
-  <%= link_to "Back to books", books_path %>
+<div class="back-btn">
+  <%= link_to "Вернуться к книге без изменений", @book, type: 'button', class: 'btn btn-my back-btn' %>
 </div>

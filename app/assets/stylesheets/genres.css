@@ -1,0 +1,13 @@
+a.genre {
+    text-decoration: none;
+    color: black;
+    font-size: 13pt;
+}
+
+a.genre:hover {
+    text-decoration: underline;
+}
+
+ul.genre-list {
+    margin-left: 20px;
+}

@@ -1,0 +1,14 @@
+<h1>Избранное</h1>
+<div class="d-flex flex-wrap">
+  <% if @liked_books&.empty? %>
+   <h5>Вы ещё не добавили в избранное ни одной книги.</h5>
+  <% else %>
+    <% @liked_books.each do |book| %>
+      <%= render 'books/book_brief', book: book %>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="back-btn">
+  <%= link_to "Вернуться к своему профилю", @user, type: 'button', class: 'btn btn-my back-btn' %>
+</div>

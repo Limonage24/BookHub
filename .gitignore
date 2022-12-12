@@ -31,3 +31,5 @@
 /config/master.key
 
 /.byebug_history
+/node_modules/@hotwired/*
+/backup

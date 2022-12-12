@@ -31,7 +31,7 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.authors (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     description text
 );
 
@@ -61,7 +61,7 @@ ALTER SEQUENCE public.authors_id_seq OWNED BY public.authors.id;
 
 CREATE TABLE public.books (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     description text,
     cover text
 );
@@ -93,9 +93,10 @@ ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 CREATE TABLE public.comments (
     id bigint NOT NULL,
     user_id bigint,
-    book_id bigint,
+    book_id bigint NOT NULL,
     reply_to_id bigint,
-    content text,
+    content text NOT NULL,
+    deleted boolean NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -126,7 +127,8 @@ ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
 
 CREATE TABLE public.genres (
     id bigint NOT NULL,
-    name character varying
+    name character varying NOT NULL,
+    description text
 );
 
 
@@ -155,8 +157,8 @@ ALTER SEQUENCE public.genres_id_seq OWNED BY public.genres.id;
 
 CREATE TABLE public.listbookauthors (
     id bigint NOT NULL,
-    book_id bigint,
-    author_id bigint
+    book_id bigint NOT NULL,
+    author_id bigint NOT NULL
 );
 
 
@@ -185,8 +187,8 @@ ALTER SEQUENCE public.listbookauthors_id_seq OWNED BY public.listbookauthors.id;
 
 CREATE TABLE public.listbookgenres (
     id bigint NOT NULL,
-    book_id bigint,
-    genre_id bigint
+    book_id bigint NOT NULL,
+    genre_id bigint NOT NULL
 );
 
 
@@ -215,8 +217,8 @@ ALTER SEQUENCE public.listbookgenres_id_seq OWNED BY public.listbookgenres.id;
 
 CREATE TABLE public.listuserlikedbooks (
     id bigint NOT NULL,
-    book_id bigint,
-    user_id bigint
+    book_id bigint NOT NULL,
+    user_id bigint NOT NULL
 );
 
 
@@ -240,6 +242,37 @@ ALTER SEQUENCE public.listuserlikedbooks_id_seq OWNED BY public.listuserlikedboo
 
 
 --
+-- Name: listuserreadbooks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.listuserreadbooks (
+    id bigint NOT NULL,
+    book_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: listuserreadbooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.listuserreadbooks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: listuserreadbooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.listuserreadbooks_id_seq OWNED BY public.listuserreadbooks.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -254,8 +287,8 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    username character varying,
-    password_digest character varying,
+    username character varying NOT NULL,
+    password_digest character varying NOT NULL,
     description text,
     role character varying,
     avatar text
@@ -331,6 +364,13 @@ ALTER TABLE ONLY public.listuserlikedbooks ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: listuserreadbooks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.listuserreadbooks ALTER COLUMN id SET DEFAULT nextval('public.listuserreadbooks_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -402,6 +442,14 @@ ALTER TABLE ONLY public.listuserlikedbooks
 
 
 --
+-- Name: listuserreadbooks listuserreadbooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.listuserreadbooks
+    ADD CONSTRAINT listuserreadbooks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -418,75 +466,119 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: comments comments_books_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: index_listbookauthors_on_book_id_and_author_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_listbookauthors_on_book_id_and_author_id ON public.listbookauthors USING btree (book_id, author_id);
+
+
+--
+-- Name: index_listbookgenres_on_book_id_and_genre_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_listbookgenres_on_book_id_and_genre_id ON public.listbookgenres USING btree (book_id, genre_id);
+
+
+--
+-- Name: index_listuserlikedbooks_on_book_id_and_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_listuserlikedbooks_on_book_id_and_user_id ON public.listuserlikedbooks USING btree (book_id, user_id);
+
+
+--
+-- Name: index_listuserreadbooks_on_book_id_and_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_listuserreadbooks_on_book_id_and_user_id ON public.listuserreadbooks USING btree (book_id, user_id);
+
+
+--
+-- Name: comments fk_rails_00bb977e40; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_books_id_fk FOREIGN KEY (book_id) REFERENCES public.books(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_00bb977e40 FOREIGN KEY (reply_to_id) REFERENCES public.comments(id);
 
 
 --
--- Name: comments comments_comments_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_comments_id_fk FOREIGN KEY (reply_to_id) REFERENCES public.comments(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: comments comments_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: comments fk_rails_03de2dc08c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.comments
-    ADD CONSTRAINT comments_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_03de2dc08c FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
--- Name: listbookauthors listbookauthors_authors_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: listbookauthors fk_rails_06273f2e61; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.listbookauthors
-    ADD CONSTRAINT listbookauthors_authors_id_fk FOREIGN KEY (author_id) REFERENCES public.authors(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_06273f2e61 FOREIGN KEY (author_id) REFERENCES public.authors(id);
 
 
 --
--- Name: listbookauthors listbookauthors_books_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: listbookauthors fk_rails_0badc16a50; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.listbookauthors
-    ADD CONSTRAINT listbookauthors_books_id_fk FOREIGN KEY (book_id) REFERENCES public.books(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_0badc16a50 FOREIGN KEY (book_id) REFERENCES public.books(id);
 
 
 --
--- Name: listbookgenres listbookgenres_books_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.listbookgenres
-    ADD CONSTRAINT listbookgenres_books_id_fk FOREIGN KEY (book_id) REFERENCES public.books(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: listbookgenres listbookgenres_genres_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: listbookgenres fk_rails_2714bf56ac; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.listbookgenres
-    ADD CONSTRAINT listbookgenres_genres_id_fk FOREIGN KEY (genre_id) REFERENCES public.genres(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_2714bf56ac FOREIGN KEY (book_id) REFERENCES public.books(id);
 
 
 --
--- Name: listuserlikedbooks listuserlikedbooks_books_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: listuserreadbooks fk_rails_56dcbb6464; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.listuserreadbooks
+    ADD CONSTRAINT fk_rails_56dcbb6464 FOREIGN KEY (book_id) REFERENCES public.books(id);
+
+
+--
+-- Name: listuserlikedbooks fk_rails_76f301350f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.listuserlikedbooks
-    ADD CONSTRAINT listuserlikedbooks_books_id_fk FOREIGN KEY (book_id) REFERENCES public.books(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_76f301350f FOREIGN KEY (book_id) REFERENCES public.books(id);
 
 
 --
--- Name: listuserlikedbooks listuserlikedbooks_users_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: listuserlikedbooks fk_rails_8e420a3f45; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.listuserlikedbooks
-    ADD CONSTRAINT listuserlikedbooks_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_8e420a3f45 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: listuserreadbooks fk_rails_a34c276659; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.listuserreadbooks
+    ADD CONSTRAINT fk_rails_a34c276659 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: comments fk_rails_a98e86e5b9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT fk_rails_a98e86e5b9 FOREIGN KEY (book_id) REFERENCES public.books(id);
+
+
+--
+-- Name: listbookgenres fk_rails_b88c2ee7d5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.listbookgenres
+    ADD CONSTRAINT fk_rails_b88c2ee7d5 FOREIGN KEY (genre_id) REFERENCES public.genres(id);
 
 
 --
@@ -503,6 +595,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221024213460'),
 ('20221024213461'),
 ('20221024213462'),
-('20221024213463');
+('20221024213463'),
+('20221205142121'),
+('20221207180619'),
+('20221207181934'),
+('20221207182057'),
+('20221207182110'),
+('20221209234852');
 
 

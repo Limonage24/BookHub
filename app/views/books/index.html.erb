@@ -1,24 +1,17 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
-<h1>Books</h1>
+<%= render 'search_form' %>
 
-<%= form_with(url: search_books_url, method: :get) do |form| %>
-  <div>
-    <%= form.label :search, style: "display: block" %>
-    <%= form.text_field :search, name: 'search_request[book_name]' %>
-  </div>
-  <div>
-    <%= form.submit %>
-  </div>
+<% if admin_signed_in? %>
+<div class="admin-book-tools align-items-center btn-toolbar border w-auto justify-content-around">
+  <%= button_to "Добавить новый жанр", new_genre_url, method: :get, class: 'btn btn-my mr-2' %>
+  <%= button_to "Добавить нового автора", new_author_url, method: :get, class: 'btn btn-my mr-2' %>
+  <%= button_to "Добавить новую книгу", new_book_url, method: :get, class: 'btn btn-my mr-2' %>
+</div>
 <% end %>
 
-<div id="books">
+<div id="books" class="d-flex flex-wrap">
   <% @books.each do |book| %>
-    <%= render book %>
-    <p>
-      <%= link_to "Show this book", book %>
-    </p>
+     <%= render 'book_brief', book: book %>
   <% end %>
 </div>
-
-<%= link_to "New book", new_book_path %>

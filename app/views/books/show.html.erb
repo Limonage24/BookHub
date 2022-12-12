@@ -1,27 +1,66 @@
-<p style="color: green"><%= notice %></p>
+<%= render 'layouts/message' %>
 
-<%= render @book %>
+<!--<div class="container-fluid">-->
+  <%= render @book %>
+<!--</div>-->
 
-<div>
-  <%= link_to "Edit this book", edit_book_path(@book) %> |
-  <%= link_to "Back to books", books_path %>
 
-  <%= button_to "Destroy this book", @book, method: :delete %>
+<% if admin_signed_in?%>
+<div class="admin-book-tools align-items-center btn-toolbar border w-auto justify-content-around" role="toolbar" aria-label="Toolbar with button groups">
+  <%= button_to "Отредактировать информацию о книге", edit_book_path(@book), method: :get, class: 'btn btn-my' %>
+  &nbsp;&nbsp;&nbsp;
+  <%= button_to "Удалить книгу", @book, method: :delete, class: 'btn btn-danger' %>
+</div>
+<% end %>
 
-  <%= form_with model: Comment.new do |form| %>
-    <div>
-      <%= form.label :content, style: "display: block" %>
-      <%= form.text_area :content %>
+<div class="content-block">
+  <% if signed_in?%>
+    <div class="user-book-tools align-items-center btn-toolbar w-auto justify-content-around" role="toolbar" aria-label="Toolbar with button groups">
+  <% if already_liked? @book %>
+    <%= button_to 'Удалить из избранного', like_books_url, class:'btn btn-my', method: 'post',
+                  params: { book_liked: { already_liked: true}, id: @book.id, user: {id: current_user.id}} %>
+  <% else %>
+    <%= button_to 'Добавить в избранное', like_books_url, class:'btn btn-my', method: 'post',
+                  params: {book_liked: { already_liked: false}, id: @book.id, user: {id: current_user.id}} %>
+  <% end %>
+
+  <% if already_read? @book %>
+    <%= button_to 'Отметить как непрочитанную', read_books_url, class:'btn btn-my', method: 'post',
+                  params: {book_read: { already_read: true}, id: @book.id, user: {id: current_user.id}} %>
+  <% else %>
+    <%= button_to 'Отметить как прочитанную', read_books_url, class:'btn btn-my', method: 'post',
+                  params: {book_read: { already_read: false}, id: @book.id, user: {id: current_user.id}} %>
+  <% end %>
+</div>
+
+
+  <div class="create-comment">
+  <%= form_with model: Comment.new, class:'container-fluid' do |form| %>
+      <h5> Есть что обсудить в книге? Поделитесь своим мнением! </h5>
+      <%= form.text_area :content, class: 'form-control' %>
 
       <%= hidden_field_tag('comment[book_id]', @book.id) %>
       <div>
-        <%= form.submit %>
+        <%= form.submit 'Оставить комментарий', class: 'btn btn-my' %>
       </div>
-    </div>
   <% end %>
-  <div class="comments" id="comment-block">
-    <% @book_comments.each do |root_comment| %>
-      <%= safe_comment_tree root_comment %>
+    </div>
+  <% else %>
+  <p class="cant-write-comment">Комментарии могут оставлять только зарегистрированные пользователи.
+    <%= link_to 'Войдите', session_login_url %> или <%= link_to 'зарегитрируйтесь', new_user_url %>.
+  </p>
+  <% end %>
+
+  <div class="comments d-flex flex-column" id="comment-block">
+    <div class="comments-header p-2"><h2>Комментарии:</h2></div>
+    <div class="comments-thread p-2">
+    <% if @book_comments.nil? %>
+      <p class="no-comments">Здесь ещё нет комментариев. Будьте первым, кто начнёт обсуждение!</p>
+    <% else %>
+        <% @book_comments.each do |root_comment| %>
+          <%= safe_comment_tree root_comment %>
+        <% end %>
     <% end %>
+      </div>
   </div>
 </div>

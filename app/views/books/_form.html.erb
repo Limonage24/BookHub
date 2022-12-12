@@ -11,37 +11,116 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="d-flex flex-column">
+    <label class="form-label">Название книги:</label>
+    <%= form.text_field :name, class:'information-input form-controls', placeholder: 'Введите название книги' %>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
+  <div class="d-flex flex-column">
+    <%= form.label 'Аннотация:',  class:"form-label" %>
+    <%= form.text_area :description, placeholder: 'Введите аннотацию', class:'form-controls' %>
   </div>
 
-  <div>
-    <%= form.label :cover, style: "display: block" %>
-    <%= form.text_area :cover %>
+  <div class="d-flex flex-column">
+    <%= form.label 'Обложка (вставьте url картинки):',  class:"form-label" %>
+    <%= form.text_area :cover, placeholder: 'URL картинки', class: 'url-field form-controls' %>
   </div>
 
-    <div>
-      <%= form.label :author, style: "display: block" %>
-      <%= form.text_field :author, name: 'authors_attributes[][name]', value: book.authors.first.name %>
-    </div>
-
-  <div>
-    <%= form.label :author, style: "display: block" %>
-    <%= form.text_field :author, name: 'authors_attributes[][name]' %>
+  <div class="authors d-flex flex-column">
+    <datalist id="authors-list">
+      <% Author.all.pluck(:name).each do |auth_name|  %>
+        <option value="<%= auth_name %>">
+      <% end %>
+    </datalist>
+  <label class="form-label">Авторы (выберите из списка или <%= link_to 'добавьте нового автора', new_author_url %>): </label>
+  <% if book.authors.empty? %>
+      <div class="author d-flex align-items-center" id ="author_1">
+        <%= form.text_field :author, name: 'authors_attributes[][name]', class: 'information-input form-controls',
+                            list: 'authors-list', placeholder: 'Начните вводить имя автора'%>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button data-controller="author"
+                data-action="author#delete_author"
+                data-author-id-value="1"
+                data-author-book-value="<%= book.id %>"
+                class="btn btn-my delete_author_btn">
+          Удалить автора книги
+        </button>
+      </div>
+  <% else %>
+      <% book.authors.each_with_index do |author, i| %>
+        <div class="author d-flex align-items-center" id="author_<%= i+1 %>">
+          <%= form.text_field :author, name: 'authors_attributes[][name]', value: author.name, class: 'information-input form-controls',
+                                list: 'authors-list', placeholder: 'Начните вводить имя автора'%>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button data-controller="author"
+                  data-action="author#delete_author"
+                  data-author-id-value="<%= i+1 %>"
+                  data-author-book-value="<%= book.id %>"
+                  class="btn btn-my delete_author_btn">
+            Удалить автора книги
+          </button>
+        </div>
+      <% end %>
+  <% end %>
   </div>
 
-  <div>
-    <%= form.label :genre, style: "display: block" %>
-    <%= form.text_field :genre, name: 'genres_attributes[][name]' %>
+  <section>
+    <button data-controller="author"
+            data-action="author#add_author"
+            data-author-book-value="<%= book.id %>"
+            class="btn btn-my add_author_btn form-controls">
+      Добавить автора книги
+    </button>
+  </section>
+
+  <div class="genres d-flex flex-column">
+    <datalist id="genres-list">
+      <% Genre.all.pluck(:name).each do |gen_name|  %>
+        <option value="<%= gen_name %>">
+      <% end %>
+    </datalist>
+    <label class="form-label">Жанры (выберите из списка или <%= link_to 'добавьте новый жанр', new_genre_url %>): </label>
+    <% if book.genres.empty? %>
+      <div class="genre d-flex align-items-center" id = "genre_1">
+        <%= form.text_field :genre, name: 'genres_attributes[][name]', class: 'information-input form-controls',
+                            list: 'genres-list', placeholder: 'Начните вводить название жанра'%>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button data-controller="genre"
+                data-action="genre#delete_genre"
+                data-genre-id-value="1"
+                data-genre-book-value="<%= book.id %>"
+                class="btn btn-my delete_genre_btn">
+          Удалить жанр книги
+        </button>
+      </div>
+    <% else %>
+      <% book.genres.each_with_index do |genre, i| %>
+        <div class="genre d-flex align-items-center" id="genre_<%= i+1 %>">
+          <%= form.text_field :genre, name: 'genres_attributes[][name]', value: genre.name, class: 'information-input form-controls',
+                              list: 'genres-list', placeholder: 'Начните вводить название жанра'%>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button data-controller="genre"
+                  data-action="genre#delete_genre"
+                  data-genre-id-value="<%= i+1 %>"
+                  data-genre-book-value="<%= book.id %>"
+                  class="btn btn-my delete_genre_btn">
+            Удалить жанр книги
+          </button>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <section>
+    <button data-controller="genre"
+            data-action="genre#add_genre"
+            data-genre-book-value="<%= book.id %>"
+            class="btn btn-my add_genre_btn form-controls">
+      Добавить жанр книги
+    </button>
+  </section>
+
+  <div class="submit-btn d-flex justify-content-center">
+    <%= form.submit 'Принять', class: 'btn btn-my btn-lg' %>
   </div>
 <% end %>
