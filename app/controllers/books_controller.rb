@@ -1,16 +1,18 @@
 class BooksController < ApplicationController
   before_action :set_book, only: %i[show edit update destroy like_book read_book]
   before_action :set_user, only: %i[like_book read_book]
-  skip_before_action :require_login, only: %i[index show search]
+  skip_before_action :require_login, only: %i[index show search rules]
   before_action :admin_access, only: %i[new create edit update destroy]
   before_action :current?, only: %i[read_book like_book]
 
   # GET /books or /books.json
+  # Список книг
   def index
     @books = Book.all
   end
 
   # GET /books/1 or /books/1.json
+  # Страница книги
   def show
     comments_assoc_arr = Comment.where(book_id: @book.id).sort_by(&:created_at).to_a
     if comments_assoc_arr.empty?
@@ -22,20 +24,28 @@ class BooksController < ApplicationController
   end
 
   # GET /books/search
+  # Поиск книги
   def search
     @search_param = book_search_params[:book_name]
-    @books_found = Book.where('name LIKE ?', "%#{@search_param}%").sort_by(&:name)
+    @books_found = Book.where('LOWER(name) LIKE ?', "%#{@search_param.downcase}%").sort_by(&:name)
   end
 
   # GET /books/new
+  # Страница новой книги
   def new
     @book = Book.new
   end
 
   # GET /books/1/edit
+  # Редактирование книги
   def edit; end
 
+  # GET /books/rules
+  # Правила форума
+  def rules; end
+
   # POST /books or /books.json
+  # Создание книги
   def create
     @book = Book.new(book_params)
     set_authors
@@ -53,6 +63,7 @@ class BooksController < ApplicationController
   end
 
   # PATCH/PUT /books/1 or /books/1.json
+  # Редактирование книги
   def update
     set_authors
     set_genres
@@ -67,6 +78,8 @@ class BooksController < ApplicationController
     end
   end
 
+  # POST /books/like_book/1 or /books/like_book/1.json
+  # Добавление книги в избранное
   def like_book
     if book_liked_params[:already_liked] == 'true'
       like_id = Listuserlikedbook.find_by_book_id_and_user_id(@book.id, current_user.id).id
@@ -89,6 +102,8 @@ class BooksController < ApplicationController
     end
   end
 
+  # POST /books/read_book/1 or /books/read_book/1.json
+  # Добавление книги в прочитанное
   def read_book
     if book_read_params[:already_read] == 'true'
       read_id = Listuserreadbook.find_by_book_id_and_user_id(@book.id, current_user.id).id
@@ -112,6 +127,7 @@ class BooksController < ApplicationController
   end
 
   # DELETE /books/1 or /books/1.json
+  # Удаление книги
   def destroy
     @book.destroy
 
@@ -161,6 +177,7 @@ class BooksController < ApplicationController
     @user = User.find(book_user_params[:id])
   end
 
+  # Поиск существующих авторов в БД для создания книги
   def set_authors
     book_authors_params.each do |author_name|
       next if author_name[:name].empty?
@@ -172,19 +189,20 @@ class BooksController < ApplicationController
     end
   end
 
+  # Поиск существующих жанров в БД для создания книги
   def set_genres
     book_genres_params.each do |genre_name|
-      p @book
       next if genre_name[:name].empty?
 
-      p genre = Genre.find_by_name(genre_name[:name])
-      p @book.genres.include?(genre)
+      genre = Genre.find_by_name(genre_name[:name])
+      @book.genres.include?(genre)
       next if @book.genres.include?(genre) || genre.nil?
 
       @book.genres << genre
     end
   end
 
+  # Формирование дерева комментариев для отображения на странице книги
   def form_comments_tree(comments_arr, min_id, reply_to = nil)
     comments_arr.select { |com| com.reply_to_id == reply_to }
                 .map do |child|

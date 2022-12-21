@@ -21,8 +21,8 @@
 <div class="user-content d-flex flex-row">
   <% if @user == current_user %>
   <div class="user-collections-btns btn-group-vertical p-2">
-      <%= link_to "Избранное", liked_books_users_url(params: {id: @user.id}), method: :get, class: 'btn btn-my submit-btn'%>
-      <%= link_to "Прочитанные книги", read_books_users_url(params: {id: @user.id}), method: :get, class: 'btn btn-my submit-btn' %>
+      <%= link_to "Избранное", liked_books_user_url(@user), method: :get, class: 'btn btn-my submit-btn'%>
+      <%= link_to "Прочитанные книги", read_books_user_url(@user), method: :get, class: 'btn btn-my submit-btn' %>
   </div>
   <% end %>
   <% if @user.description.nil? %>

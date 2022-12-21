@@ -5,7 +5,7 @@ class GenresController < ApplicationController
 
   # GET /genres or /genres.json
   def index
-    @genres = Genre.all
+    @genres = Genre.all.sort_by(&:name)
   end
 
   # GET /genres/1 or /genres/1.json

@@ -1,9 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  book_id: 
-  author_id: 
 
-two:
-  book_id: 
-  author_id: 
+listbookauthors1:
+      id: 7
+      book_id: 7
+      author_id: 1
+
+listbookauthors2:
+      id: 8
+      book_id: 8
+      author_id: 2
+
+listbookauthors3:
+      id: 9
+      book_id: 9
+      author_id: 3

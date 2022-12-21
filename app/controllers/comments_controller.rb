@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     @comment = Comment.new(**comment_params, user_id: current_user.id, deleted: false)
 
     respond_to do |format|
-      if @comment.save
+      if !@comment.content.empty? && @comment.save
         format.html { redirect_to book_url(@comment.book) }
         format.json { render 'books/show', status: :created, location: @comment }
       else

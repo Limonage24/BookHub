@@ -6,7 +6,7 @@
     <% @read_books.each do |record| %>
       <div class="d-flex flex-column p-2">
         <span class="badge badge-secondary">
-             Прочитано <%= record.second.strftime("%d.%m.%Y, %H:%M") %>
+             Прочитано <%= record.second.localtime.strftime("%d.%m.%Y, %H:%M") %>
         </span>
         <%= render 'books/book_brief', book: record.first %>
       </div>

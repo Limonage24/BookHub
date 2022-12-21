@@ -1,15 +1,23 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  username: MyString
-  password_digest: <%= BCrypt::Password.create("secret") %>
-  description: MyText
-  role: MyString
-  avatar: MyText
-
-two:
-  username: MyString
-  password_digest: <%= BCrypt::Password.create("secret") %>
-  description: MyText
-  role: MyString
-  avatar: MyText
+admin:
+    id: 1
+    username: "admin"
+    password_digest: <%= BCrypt::Password.create("admin") %>
+    description: "Администратор, модератор. Люблю Оруэлла и Хаксли."
+    role: "admin"
+    avatar: "https://telegram.org/file/811140642/1/nM2DU-Ywr3A/e5809db818346b4be5"
+user1:
+    id: 2
+    username: "user"
+    password_digest: <%= BCrypt::Password.create("user") %>
+    description: "Чем дольше человек проводит время наедине с книгой, тем больше вероятность того, что его внутренний мир станет независимым во внешнем.\nЧитаю Спаркса и Емца."
+    role: null
+    avatar: "https://i.pinimg.com/564x/df/4b/f3/df4bf35c88eade6fffe702f35515fc3e.jpg"
+user2:
+    id: 3
+    username: "BestReader"
+    password_digest: <%= BCrypt::Password.create("bestreader") %>
+    description: "Запоем читаю фантастику и фэнтези, но не возражаю против прочтения всего остального: от классики до литрпг. Любимые авторы А. Сапковский и Б. Акунин."
+    role: null
+    avatar: "https://64.media.tumblr.com/2b7984155c54090c6eff89b9dc7768b9/tumblr_ouj1gshEGy1v1u0gbo1_640.jpg"

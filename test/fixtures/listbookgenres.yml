@@ -1,9 +1,51 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  book_id: 
-  genre_id: 
+listbookgenres1:
+      id: 1
+      book_id: 7
+      genre_id: 4
 
-two:
-  book_id: 
-  genre_id: 
+listbookgenres2:
+      id: 17
+      book_id: 7
+      genre_id: 2
+
+listbookgenres3:
+      id: 18
+      book_id: 7
+      genre_id: 1
+
+listbookgenres4:
+      id: 19
+      book_id: 7
+      genre_id: 3
+
+listbookgenres5:
+      id: 20
+      book_id: 8
+      genre_id: 7
+
+listbookgenres6:
+      id: 21
+      book_id: 8
+      genre_id: 6
+
+listbookgenres7:
+      id: 22
+      book_id: 8
+      genre_id: 5
+
+listbookgenres8:
+      id: 23
+      book_id: 8
+      genre_id: 1
+
+listbookgenres9:
+      id: 24
+      book_id: 9
+      genre_id: 1
+
+listbookgenres10:
+      id: 25
+      book_id: 9
+      genre_id: 8

@@ -31,17 +31,6 @@ textarea {
     color: white;
 }
 
-.btn-my-outline {
-    /*background-color: #51C3C3;*/
-    border-color: #1A7F7F;
-    color: #1A7F7F;
-    padding-top: 2px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 5px;
-}
-
 .nav_text {
     font-size: 13pt;
     margin-left: 10px;
@@ -96,5 +85,8 @@ div.index-item:hover {
     font-size: 10pt;
     color: gray;
     margin-left: 30px;
-    /*text-align: center;*/
+}
+
+.necessary-fields-label {
+    margin-left: 5px;
 }

@@ -33,3 +33,4 @@
 /.byebug_history
 /node_modules/@hotwired/*
 /backup
+/coverage

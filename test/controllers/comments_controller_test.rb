@@ -1,48 +1,40 @@
-require "test_helper"
+require 'test_helper'
 
 class CommentsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @comment = comments(:one)
+    @comment = comments(:comment1)
   end
 
-  test "should get index" do
-    get comments_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_comment_url
-    assert_response :success
-  end
-
-  test "should create comment" do
-    assert_difference("Comment.count") do
-      post comments_url, params: { comment: { book_id: @comment.book_id, content: @comment.content, reply_to: @comment.reply_to, user_id: @comment.user_id } }
+  test 'should create comment' do
+    user = users(:user1)
+    sign_in_as(user)
+    assert_difference('Comment.count') do
+      post comments_url, params: { comment: { book_id: @comment.book_id, content: @comment.content,
+                                              reply_to: @comment.reply_to } }
     end
 
-    assert_redirected_to comment_url(Comment.last)
+    assert_redirected_to book_url(@comment.book)
   end
 
-  test "should show comment" do
-    get comment_url(@comment)
-    assert_response :success
+  test 'should update comment' do
+    user = users(:user1)
+    sign_in_as(user)
+
+    patch comment_url(@comment), params: { comment: { book_id: @comment.book_id, content: @comment.content,
+                                                      reply_to: @comment.reply_to }, user: { id: user.id } }
+    assert_redirected_to book_url(@comment.book)
   end
 
-  test "should get edit" do
-    get edit_comment_url(@comment)
-    assert_response :success
-  end
+  test 'should destroy comment' do
+    user = users(:admin)
+    sign_in_as(user)
 
-  test "should update comment" do
-    patch comment_url(@comment), params: { comment: { book_id: @comment.book_id, content: @comment.content, reply_to: @comment.reply_to, user_id: @comment.user_id } }
-    assert_redirected_to comment_url(@comment)
-  end
+    delete comment_url(@comment)
+    @comment.reload
 
-  test "should destroy comment" do
-    assert_difference("Comment.count", -1) do
-      delete comment_url(@comment)
-    end
+    assert_equal 'Комментарий был удалён.', @comment.content
+    assert @comment.deleted
 
-    assert_redirected_to comments_url
+    assert_redirected_to book_url(@comment.book)
   end
 end

@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if !found && @user.save
         sign_in @user
-        format.html { redirect_to user_url(@user), notice: "User was successfully created." }
+        format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, alert: 'Such user already exists', status: :unprocessable_entity }
@@ -39,9 +39,10 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
+    found_another = (User.find_by_username(user_params[:username]) != @user)
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+      if !found_another && @user.update(user_params)
+        format.html { redirect_to user_url(@user), notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -50,6 +51,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/liked_books
   def show_liked_books
     @liked_books = []
     @user.listuserlikedbooks&.each do |record|
@@ -57,6 +59,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/read_books
   def show_read_books
     @read_books = []
     @user.listuserreadbooks&.each do |record|
@@ -69,7 +72,7 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
+      format.html { redirect_to root_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

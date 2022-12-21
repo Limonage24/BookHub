@@ -2,6 +2,11 @@
 
 <%= render 'search_form' %>
 
+<h5>Пожалуйста, перед началом обсуждения ознакомьтесь с
+  <%= link_to 'правилами форума', rules_url %>
+   во избежание неприятных ситуаций.
+</h5>
+
 <% if admin_signed_in? %>
 <div class="admin-book-tools align-items-center btn-toolbar border w-auto justify-content-around">
   <%= button_to "Добавить новый жанр", new_genre_url, method: :get, class: 'btn btn-my mr-2' %>
@@ -10,6 +15,7 @@
 </div>
 <% end %>
 
+<h4>Наша библиотека:</h4>
 <div id="books" class="d-flex flex-wrap">
   <% @books.each do |book| %>
      <%= render 'book_brief', book: book %>
